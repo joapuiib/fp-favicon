@@ -42,7 +42,7 @@ function computer_border(draw, x = 0, y = 0, w = 0, h = 0, bw = 10) {
   draw.path(path).attr({ fill: 'black' });
 }
 
-function f(draw, x, y, w, h, bw) {
+function f(draw, x = 0, y = 0, w = 0, h = 0, mw = 0, bw = 10) {
   var path = "";
   var r = bw / 2;
   var cx = x + bw / 2;
@@ -58,26 +58,20 @@ function f(draw, x, y, w, h, bw) {
   // Bottom arc
   path += ` A ${r} ${r} 0 0 0 ${cx} ${cy}`;
 
-  r = bw / 4;
-  cy = y + bw + r + ((h - 2*bw) / 2);
-  path += ` L ${cx} ${cy}`;
-  cy -= r;
-  cx += r;
-  path += ` A ${r} ${r} 0 0 1 ${cx} ${cy}`;
-
-  cx = x + bw + r + ((w - 2*bw));
+  // Middle bottom arc
+  cy = y + h/2 + bw/2;
   path += ` L ${cx} ${cy}`;
 
-  cy -= bw;
+  // Middle right arc
   r = bw / 2;
+  cx = x + bw + mw - r;
+  path += ` L ${cx} ${cy}`;
+  cy -= bw;
   path += ` A ${r} ${r} 0 0 0 ${cx} ${cy}`;
 
-  r = bw / 4;
-  cx = x + bw + r;
+  // Middle top arc
+  cx = x + bw;
   path += `L ${cx} ${cy}`;
-  cy -= r;
-  cx -= r;
-  path += ` A ${r} ${r} 0 0 1 ${cx} ${cy}`;
 
   r = bw / 4;
   cx = x + bw;
@@ -100,8 +94,59 @@ function f(draw, x, y, w, h, bw) {
   draw.path(path).attr({ fill: 'black' });
 }
 
+function p(draw, x = 0, y = 0, w = 0, h = 0, bw = 10) {
+  var path = "";
+  var r = bw / 2;
+  var cx = x + bw / 2;
+  var cy = y;
+  path += ` M ${cx} ${cy}`;
+  cx = x;
+  cy = y + bw / 2;
+  // Top left arc
+  path += ` A ${r} ${r} 0 0 0 ${cx} ${cy}`;
+  cy = y + h - bw / 2;
+  path += ` L ${cx} ${cy}`;
+  cx = x + bw;
+  // Bottom arc
+  path += ` A ${r} ${r} 0 0 0 ${cx} ${cy}`;
+
+  r = bw / 4;
+  cx = x + bw;
+  cy = y + bw + r;
+  path += ` L ${cx} ${cy}`;
+  // Inner top left arc
+  cx += r;
+  cy -= r;
+  path += ` A ${r} ${r} 0 0 1 ${cx} ${cy}`;
+
+  // Inner right arc
+  r = ((h / 2) - bw - (bw / 2)) / 2;
+  cx = x + w - bw - r;
+  path += ` L ${cx} ${cy}`;
+  cy += r * 2;
+  path += ` A ${r} ${r} 0 0 1 ${cx} ${cy}`;
+
+  // Inner left arc
+  cy += bw;
+  r = bw / 2;
+  path += ` A ${r} ${r} 0 0 0 ${cx} ${cy}`;
+
+  // Outer right arc
+  cy = y;
+  r = r + bw;
+  path += ` A ${r} ${r} 0 0 0 ${cx} ${cy}`;
+
+  cx = x + bw / 2;
+  path += ` L ${cx} ${cy}`;
+
+  draw.path(path).attr({ fill: 'black' });
+}
+
 $().ready(function() {
   var draw = SVG().addTo('body').size(200, 200);
   computer_border(draw, 0, 0, 160, 100, 10);
-  f(draw, 30, 30, 40, 60, 10);
+  f(draw, 35, 30, 40, 60, 20, 10);
+  p(draw, 85, 30, 40, 60, 10);
+  // draw.line(0, 55, 160, 55).attr({ stroke: 'red', 'stroke-width': 1 });
+  // draw.line(0, 65, 160, 65).attr({ stroke: 'red', 'stroke-width': 1 });
 });
