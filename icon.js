@@ -144,9 +144,27 @@ function p(draw, x = 0, y = 0, w = 0, h = 0, bw = 10) {
 
 $().ready(function() {
   var draw = SVG().addTo('body').size(200, 200);
-  computer_border(draw, 0, 0, 160, 100, 10);
-  f(draw, 35, 30, 40, 60, 20, 10);
-  p(draw, 85, 30, 40, 60, 10);
+
+  var bw = 10;
+  var width = 160;
+  computer_border(draw, 0, 0, width, 100, bw);
+  var letter_bw = 12;
+  var letter_width = 50;
+  var letter_height = 80;
+  var inner_margin = 15;
+  var x = bw + inner_margin;
+  var y = bw + inner_margin;
+  f(draw, x, y, letter_width, letter_height, 20, letter_bw);
+  var letter_margin = width - 2 * (letter_width + inner_margin + bw);
+  x += letter_width + letter_margin;
+  p(draw, x, y, letter_width, letter_height, letter_bw);
+
+  for (var i = 0; i < width; i+=5) {
+    draw.line(i, 0, i, 100).attr({ stroke: 'red', 'stroke-width': 0.2 });
+  }
+  for (var i = 0; i < 100; i+=5) {
+    draw.line(0, i, width, i).attr({ stroke: 'red', 'stroke-width': 0.2 });
+  }
   // draw.line(0, 55, 160, 55).attr({ stroke: 'red', 'stroke-width': 1 });
   // draw.line(0, 65, 160, 65).attr({ stroke: 'red', 'stroke-width': 1 });
 });
